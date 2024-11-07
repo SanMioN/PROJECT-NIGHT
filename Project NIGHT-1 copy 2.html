@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Map with Search and Layers</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        #map {
+            height: calc(100vh - 60px); /* Adjust height to account for the header */
+            width: 100vw;
+        }
+
+        .leaflet-popup-content-wrapper {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        .leaflet-popup h1 {
+            font-size: 16px;
+            margin: 0 0 5px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Map of Muntinlupa City, Philippines</h1>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script>
+      
+        var map = L.map('map').setView([14.4514, 121.0489], 13);
+
+      
+        var Streets = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var OpenStreetMap = L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
+
+      
+        var myIcon = L.icon({ iconUrl: 'defaultIcon.png', iconSize: [25, 41] });
+        var orangeIcon = L.icon({ iconUrl: 'orangeIcon.png', iconSize: [25, 41] });
+        var blueIcon = L.icon({ iconUrl: 'blueIcon.png', iconSize: [25, 41] });
+        var yellowIcon = L.icon({ iconUrl: 'yellowIcon.png', iconSize: [25, 41] });
+        var hospitalIcon = L.icon({ iconUrl: 'hospitalIcon.png', iconSize: [25, 41] });
+        var pharmacyIcon = L.icon({ iconUrl: 'pharmacyIcon.png', iconSize: [25, 41] });
+        var twentyFourHourIcon = L.icon({ iconUrl: 'twentyFourHourIcon.png', iconSize: [25, 41] });
+
+     
+        var SucatBarangayMultiPurposeCoveredCourt = L.marker([14.4565833, 121.0545556], { icon: myIcon })
+            .bindPopup("<h1>Sucat Barangay Multi Purpose Covered Court</h1><p>Purok 4, Barangay Sucat, Muntinlupa City</p>");
+
+        var SucatOldSMHypermarket = L.marker([14.45075, 121.0475], { icon: orangeIcon })
+            .bindPopup("<h1>Sucat Old SM Hypermarket</h1><p>East Service Road, Barangay Sucat, Muntinlupa City</p>");
+
+        var TunasanBarangayHall = L.marker([14.4241, 121.0397], { icon: blueIcon })
+            .bindPopup("<h1>Tunasan Barangay Hall</h1><p>National Road, Barangay Tunasan, Muntinlupa City</p>");
+
+        var AlabangCountryClub = L.marker([14.4204, 121.0367], { icon: yellowIcon })
+            .bindPopup("<h1>Alabang Country Club</h1><p>Ayala Alabang Village, Muntinlupa City</p>");
+
+     
+        var hospital1 = L.marker([14.422, 121.036], { icon: hospitalIcon })
+            .bindPopup("<h1>Muntinlupa Medical Center</h1><p>Dr. Jose P. Rizal Street, Muntinlupa City</p>");
+
+   
+        var twentyFourHour1 = L.marker([14.448, 121.048], { icon: twentyFourHourIcon })
+            .bindPopup("<h1>24-Hour Convenience Store</h1><p>East Service Road, Muntinlupa City</p>");
+
+     
+        var pharmacy1 = L.marker([14.449, 121.052], { icon: pharmacyIcon })
+            .bindPopup("<h1>Mercury Drug</h1><p>National Road, Barangay Sucat, Muntinlupa City</p>");
+
+        
+        var evacuationAreas = L.layerGroup([
+            SucatBarangayMultiPurposeCoveredCourt,
+            SucatOldSMHypermarket,
+            TunasanBarangayHall,
+            AlabangCountryClub
+        ]);
+
+        var hospitals = L.layerGroup([hospital1]);
+        var twentyFourHourEstablishments = L.layerGroup([twentyFourHour1]);
+        var pharmacies = L.layerGroup([pharmacy1]);
+
+     
+        var baseLayers = {
+            "Streets": Streets,
+            "OpenStreetMap": OpenStreetMap
+        };
+
+        var overlayLayers = {
+            "Evacuation Areas": evacuationAreas,
+            "Hospitals": hospitals,
+            "24-Hour Establishments": twentyFourHourEstablishments,
+            "Pharmacies": pharmacies
+        };
+
+     
+        var geocoder = L.Control.geocoder({
+            defaultMarkGeocode: true
+        }).addTo(map);
+
+        L.control.layers(baseLayers, overlayLayers).addTo(map);
+
+       
+        evacuationAreas.addTo(map);
+        hospitals.addTo(map);
+        twentyFourHourEstablishments.addTo(map);
+        pharmacies.addTo(map);
+    </script>
+</body>
+</html>
